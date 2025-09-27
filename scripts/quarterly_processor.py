@@ -21,44 +21,87 @@ from api.pipeline_orchestrator import PipelineOrchestrator
 def fetch_latest_payload():
     """
     Fetch the latest document payload from Petrobras API
-    This simulates getting fresh data each quarter
+    Uses the real API endpoint to get current earnings call data
     """
-    # In production, this would fetch from the actual API
-    # For now, we'll create a payload based on current quarter
-    current_date = datetime.now()
-    year = current_date.year
-    quarter = (current_date.month - 1) // 3 + 1
+    try:
+        print("📡 Fetching real data from Petrobras API...")
 
-    # Mock payload structure - in production, this would be fetched from:
-    # https://www.investidorpetrobras.com.br/api/documents or similar
-    mock_payload = {
-        "data": {
-            "document_metas": [
-                {
-                    "internal_name": "central_de_resultados_audio_da_teleconferencia",
-                    "file_title": f"Áudio Teleconferência {quarter}T{str(year)[2:]}",
-                    "file_url": f"https://api.mziq.com/mzfilemanager/v2/d/25fdf098-34f5-4608-b7fa-17d60b2de47d/audio-{year}q{quarter}",
-                    "file_year": year,
-                    "file_quarter": quarter,
-                    "file_size": "100000000",  # ~100MB typical size
-                    "file_date": current_date.isoformat(),
-                    "permalink": f"https://api.mziq.com/mzfilemanager/v2/d/25fdf098-34f5-4608-b7fa-17d60b2de47d/audio-{year}q{quarter}"
-                },
-                {
-                    "internal_name": "central_de_resultados_transcricao_da_teleconferencia",
-                    "file_title": f"Transcrição {quarter}T{str(year)[2:]}",
-                    "file_url": f"https://api.mziq.com/mzfilemanager/v2/d/25fdf098-34f5-4608-b7fa-17d60b2de47d/transcript-{year}q{quarter}",
-                    "file_year": year,
-                    "file_quarter": quarter,
-                    "file_size": "500000",
-                    "file_date": current_date.isoformat(),
-                    "permalink": f"https://api.mziq.com/mzfilemanager/v2/d/25fdf098-34f5-4608-b7fa-17d60b2de47d/transcript-{year}q{quarter}"
-                }
-            ]
+        # Real Petrobras API endpoint
+        url = "https://apicatalog.mziq.com/filemanager/company/25fdf098-34f5-4608-b7fa-17d60b2de47d/filter/categories/year/meta"
+
+        headers = {
+            'accept': 'application/json, text/javascript, */*; q=0.01',
+            'accept-language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+            'content-type': 'application/json',
+            'origin': 'https://www.investidorpetrobras.com.br',
+            'referer': 'https://www.investidorpetrobras.com.br/',
+            'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36'
         }
-    }
 
-    return mock_payload
+        # Get current year for latest data
+        current_year = datetime.now().year
+
+        payload = {
+            "year": str(current_year),
+            "categories": [
+                "central_de_resultados_audio_da_teleconferencia",
+                "central_de_resultados_transcricao_da_teleconferencia"
+            ],
+            "language": "pt_BR",
+            "published": True
+        }
+
+        response = requests.post(url, headers=headers, json=payload, timeout=30)
+        response.raise_for_status()
+
+        data = response.json()
+
+        if not data.get("success"):
+            raise Exception("API returned success=false")
+
+        # Filter to only include valid audio files (non-empty)
+        documents = data.get("data", {}).get("document_metas", [])
+        valid_documents = []
+
+        for doc in documents:
+            # Only include audio files with actual content
+            if (doc.get("internal_name") == "central_de_resultados_audio_da_teleconferencia"
+                and doc.get("file_size") != "0"
+                and int(doc.get("file_size", "0")) > 1000000):  # At least 1MB
+                valid_documents.append(doc)
+            # Also include transcriptions if available
+            elif doc.get("internal_name") == "central_de_resultados_transcricao_da_teleconferencia":
+                valid_documents.append(doc)
+
+        print(f"✅ Fetched {len(valid_documents)} valid documents from API")
+
+        return {
+            "data": {
+                "document_metas": valid_documents
+            }
+        }
+
+    except Exception as e:
+        print(f"⚠️ Failed to fetch real data: {e}")
+        print("📋 Using fallback with known working audio file...")
+
+        # Fallback to known working 2T25 audio file
+        return {
+            "data": {
+                "document_metas": [
+                    {
+                        "internal_name": "central_de_resultados_audio_da_teleconferencia",
+                        "file_title": "Áudio Teleconferência 2T25",
+                        "file_url": "https://api.mziq.com/mzfilemanager/v2/d/25fdf098-34f5-4608-b7fa-17d60b2de47d/632a612a-62ef-8db3-12ed-cfb0d1afa001?origin=1",
+                        "file_year": 2025,
+                        "file_quarter": 2,
+                        "file_size": "102823553",  # ~98MB real file
+                        "file_date": "2025-08-08T00:00:00.000Z",
+                        "permalink": "https://api.mziq.com/mzfilemanager/v2/d/25fdf098-34f5-4608-b7fa-17d60b2de47d/632a612a-62ef-8db3-12ed-cfb0d1afa001?origin=1"
+                    }
+                ]
+            }
+        }
 
 
 def save_payload_to_file(payload, filename="quarterly_payload.json"):
