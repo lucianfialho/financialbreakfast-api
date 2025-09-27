@@ -265,9 +265,14 @@ def health_check():
     """Health check endpoint"""
     return {
         "status": "healthy",
-        "service": "Financial Data API",
-        "version": "1.0.0",
-        "platform": "Vercel",
+        "service": "Financial Data API with Semantic Search",
+        "version": "2.1.0",
+        "platform": "Railway",
+        "features": {
+            "financial_data": "✅ Available",
+            "semantic_search": "✅ Available" if SEMANTIC_SEARCH_AVAILABLE else "⚠️ Dependencies required",
+            "audio_processing": "✅ Available" if SEMANTIC_SEARCH_AVAILABLE else "⚠️ Dependencies required"
+        },
         "uptime": "running"
     }
 
