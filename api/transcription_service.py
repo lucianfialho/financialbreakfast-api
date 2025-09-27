@@ -27,7 +27,14 @@ class TranscriptionService:
         """
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         self.model = model
-        self.client = openai.OpenAI(api_key=self.api_key) if self.api_key else None
+        if self.api_key:
+            try:
+                self.client = openai.OpenAI(api_key=self.api_key)
+            except Exception as e:
+                print(f"Warning: Could not initialize OpenAI client: {e}")
+                self.client = None
+        else:
+            self.client = None
 
         # Create output directory
         self.output_path = Path("./transcriptions")
