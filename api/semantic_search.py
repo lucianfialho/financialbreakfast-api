@@ -34,21 +34,18 @@ class SemanticSearchService:
         threshold: float = 0.5
     ) -> List[Dict]:
         """
-        Search for similar segments using vector similarity
+        Search for similar segments using text search (fallback without vector embeddings)
 
         Args:
             query: Search query text
             company_symbol: Optional filter by company
             limit: Maximum number of results
-            threshold: Minimum similarity score (0-1)
+            threshold: Not used in text search mode
 
         Returns:
             List of similar segments with metadata
         """
-        # Generate query embedding
-        query_embedding = self.embedding_model.encode(query, convert_to_numpy=True)
-
-        # Build SQL query
+        # Use PostgreSQL full-text search instead of vector similarity
         sql = """
         SELECT
             cs.id,
@@ -64,15 +61,14 @@ class SemanticSearchService:
             ec.quarter,
             CONCAT(ec.quarter, 'T', SUBSTRING(ec.year::TEXT, 3, 2)) as period_label,
             ec.call_date,
-            1 - (cs.embedding <=> %s::vector) as similarity
+            ts_rank(to_tsvector('portuguese', cs.segment_text), plainto_tsquery('portuguese', %s)) as similarity
         FROM call_segments cs
         JOIN earnings_calls ec ON cs.call_id = ec.id
         WHERE
-            cs.embedding IS NOT NULL
-            AND (1 - (cs.embedding <=> %s::vector)) >= %s
+            to_tsvector('portuguese', cs.segment_text) @@ plainto_tsquery('portuguese', %s)
         """
 
-        params = [query_embedding.tolist(), query_embedding.tolist(), threshold]
+        params = [query, query]
 
         if company_symbol:
             sql += " AND ec.company_symbol = %s"
@@ -394,15 +390,14 @@ class SemanticSearchService:
             call_id, segment_number, segment_text,
             timestamp_start, timestamp_end, speaker,
             sentiment_score, sentiment_label, confidence_score,
-            embedding, keywords, entities
+            keywords, entities
         ) VALUES (
-            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
         )
         ON CONFLICT (call_id, segment_number) DO UPDATE SET
             segment_text = EXCLUDED.segment_text,
             sentiment_score = EXCLUDED.sentiment_score,
             sentiment_label = EXCLUDED.sentiment_label,
-            embedding = EXCLUDED.embedding,
             keywords = EXCLUDED.keywords,
             entities = EXCLUDED.entities
         RETURNING id;
@@ -418,7 +413,6 @@ class SemanticSearchService:
             segment.get("sentiment", {}).get("polarity"),
             segment.get("sentiment", {}).get("label"),
             segment.get("sentiment", {}).get("confidence"),
-            segment.get("embedding"),
             segment.get("keywords", []),
             json.dumps(segment.get("entities", {}))
         )

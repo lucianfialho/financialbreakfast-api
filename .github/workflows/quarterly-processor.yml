@@ -57,7 +57,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           echo "🗄️ Setting up database schema..."
-          psql $DATABASE_URL -f migrations/create_earnings_calls_tables.sql
+          psql $DATABASE_URL -f migrations/create_earnings_calls_tables_basic.sql
           echo "✅ Database setup complete"
 
       - name: 🎙️ Run quarterly processor
