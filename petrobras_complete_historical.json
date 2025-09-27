@@ -1,0 +1,1047 @@
+{
+  "PETR4": {
+    "company": {
+      "symbol": "PETR4",
+      "name": "Petróleo Brasileiro S.A. - Petrobras",
+      "country": "BRA",
+      "sector": "Energy",
+      "currency": "BRL"
+    },
+    "periods": [
+      {
+        "year": 2025,
+        "quarter": 2,
+        "period_label": "2T25",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 119128.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 56679.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 57902.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 68064.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 13104.08,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2025,
+        "quarter": 1,
+        "period_label": "1T25",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 123144.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 60709.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 62281.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 64491.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 13545.84,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2024,
+        "quarter": 4,
+        "period_label": "4T24",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 121268.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 58136.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 57508.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 60311.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 13339.48,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2024,
+        "quarter": 3,
+        "period_label": "3T24",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 129582.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 66578.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 64423.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 59132.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 14254.02,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2024,
+        "quarter": 2,
+        "period_label": "2T24",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 122258.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 61047.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 62332.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 59630.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 13448.38,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2024,
+        "quarter": 1,
+        "period_label": "1T24",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 117721.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 60701.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 61523.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 61838.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 12949.31,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2023,
+        "quarter": 4,
+        "period_label": "4T23",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 134258.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 72626.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 74265.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 62600.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 14768.38,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2023,
+        "quarter": 3,
+        "period_label": "3T23",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 124828.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 66315.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 66887.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 60997.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 13731.08,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2023,
+        "quarter": 2,
+        "period_label": "2T23",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 113840.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 57681.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 58171.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 57971.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 12522.4,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2023,
+        "quarter": 1,
+        "period_label": "1T23",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 139068.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 73311.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 74516.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 53349.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 15297.48,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2022,
+        "quarter": 4,
+        "period_label": "4T22",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 158579.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 76637.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 75504.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 53799.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 17443.69,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2022,
+        "quarter": 3,
+        "period_label": "3T22",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 170076.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 86836.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 92268.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 54268.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 18708.36,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2022,
+        "quarter": 2,
+        "period_label": "2T22",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 170960.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 95861.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 99337.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 53577.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 18805.6,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2022,
+        "quarter": 1,
+        "period_label": "1T22",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 141641.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 74766.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 78214.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 58554.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 15580.51,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2021,
+        "quarter": 4,
+        "period_label": "4T21",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 134190.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 59047.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 62945.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 58743.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 14760.9,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2021,
+        "quarter": 3,
+        "period_label": "3T21",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 121594.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 59552.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 63873.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 59588.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 13375.34,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2021,
+        "quarter": 2,
+        "period_label": "2T21",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 110710.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 57005.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 61938.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 63685.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 12178.1,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2021,
+        "quarter": 1,
+        "period_label": "1T21",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 86174.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 44033.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 48949.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 70966.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 9479.14,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2020,
+        "quarter": 4,
+        "period_label": "4T20",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 74972.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 59890.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 47043.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 75538.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 8246.92,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2020,
+        "quarter": 3,
+        "period_label": "3T20",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 70730.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 33769.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 37271.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 79588.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 7780.3,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2020,
+        "quarter": 2,
+        "period_label": "2T20",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 50898.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 18218.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 24986.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 91227.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 5598.78,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      },
+      {
+        "year": 2020,
+        "quarter": 1,
+        "period_label": "1T20",
+        "financial_data": [
+          {
+            "metric_name": "net_revenue",
+            "metric_label": "Receita Líquida",
+            "value": 75469.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "revenue"
+          },
+          {
+            "metric_name": "net_income",
+            "metric_label": "Lucro Líquido",
+            "value": 31615.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "ebitda",
+            "metric_label": "EBITDA",
+            "value": 37504.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "profitability"
+          },
+          {
+            "metric_name": "net_debt",
+            "metric_label": "Dívida Líquida",
+            "value": 89237.0,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "debt"
+          },
+          {
+            "metric_name": "capex",
+            "metric_label": "Investimentos (CAPEX)",
+            "value": 8301.59,
+            "currency": "BRL",
+            "unit": "millions",
+            "metric_category": "investment"
+          }
+        ]
+      }
+    ]
+  }
+}

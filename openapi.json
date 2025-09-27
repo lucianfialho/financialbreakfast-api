@@ -1,0 +1,595 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Financial Data API",
+    "description": "API para dados financeiros de empresas brasileiras. Acesse dados de receita, EBITDA, lucro líquido, CAPEX e dívida líquida da Petrobras (PETR4) e Vale (VALE3) através de endpoints RESTful com autenticação por API key.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "API Support",
+      "email": "support@financialapi.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "termsOfService": "https://financialapi.com/terms"
+  },
+  "servers": [
+    {
+      "url": "https://financialbreakfast.up.railway.app",
+      "description": "Production server"
+    },
+    {
+      "url": "http://localhost:8003",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "API Information",
+        "description": "Retorna informações gerais da API, endpoints disponíveis e chaves de demonstração",
+        "operationId": "get_api_info",
+        "tags": ["Info"],
+        "responses": {
+          "200": {
+            "description": "Informações da API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {"type": "string"},
+                    "version": {"type": "string"},
+                    "docs": {"type": "string"},
+                    "auth": {
+                      "type": "object",
+                      "properties": {
+                        "header": {"type": "string"},
+                        "demo_keys": {
+                          "type": "object",
+                          "properties": {
+                            "free": {"type": "string"},
+                            "pro": {"type": "string"},
+                            "enterprise": {"type": "string"}
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Verifica se a API está funcionando corretamente",
+        "operationId": "health_check",
+        "tags": ["Health"],
+        "responses": {
+          "200": {
+            "description": "API está saudável",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {"type": "string", "example": "healthy"},
+                    "service": {"type": "string", "example": "Financial Data API"},
+                    "version": {"type": "string", "example": "1.0.0"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "summary": "Registrar Usuário",
+        "description": "Registra um novo usuário e gera uma API key",
+        "operationId": "register_user",
+        "tags": ["Authentication"],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "email"
+            },
+            "description": "Email do usuário"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário registrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {"type": "string"},
+                    "api_key": {"type": "string"},
+                    "plan": {"type": "string"},
+                    "rate_limit_per_hour": {"type": "integer"},
+                    "message": {"type": "string"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies": {
+      "get": {
+        "summary": "Listar Empresas",
+        "description": "Retorna lista de todas as empresas disponíveis na API",
+        "operationId": "get_companies",
+        "tags": ["Companies"],
+        "security": [{"ApiKeyAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Lista de empresas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Company"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/api/v1/companies/{symbol}": {
+      "get": {
+        "summary": "Obter Empresa",
+        "description": "Retorna detalhes de uma empresa específica",
+        "operationId": "get_company",
+        "tags": ["Companies"],
+        "security": [{"ApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["PETR4", "VALE3"]
+            },
+            "description": "Símbolo da empresa (ex: PETR4, VALE3)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da empresa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Company"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Empresa não encontrada"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/api/v1/financial-data/{symbol}": {
+      "get": {
+        "summary": "Obter Dados Financeiros",
+        "description": "Retorna dados financeiros completos de uma empresa com filtros opcionais",
+        "operationId": "get_financial_data",
+        "tags": ["Financial Data"],
+        "security": [{"ApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["PETR4", "VALE3"]
+            },
+            "description": "Símbolo da empresa"
+          },
+          {
+            "name": "years",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Anos para filtrar (ex: 2024,2025)",
+            "example": "2024,2025"
+          },
+          {
+            "name": "metrics",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Métricas para filtrar (ex: net_revenue,ebitda)",
+            "example": "net_revenue,ebitda"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            },
+            "description": "Limite de períodos retornados"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados financeiros da empresa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialDataResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Empresa não encontrada"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/api/v1/financial-data/{symbol}/metrics": {
+      "get": {
+        "summary": "Listar Métricas",
+        "description": "Retorna lista de métricas disponíveis para uma empresa",
+        "operationId": "get_available_metrics",
+        "tags": ["Financial Data"],
+        "security": [{"ApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["PETR4", "VALE3"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de métricas disponíveis",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": ["net_revenue", "ebitda", "net_income", "capex", "net_debt"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/financial-data/{symbol}/metric/{metric_name}": {
+      "get": {
+        "summary": "Série Temporal",
+        "description": "Retorna série temporal de uma métrica específica",
+        "operationId": "get_metric_time_series",
+        "tags": ["Financial Data"],
+        "security": [{"ApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["PETR4", "VALE3"]
+            }
+          },
+          {
+            "name": "metric_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["net_revenue", "ebitda", "net_income", "capex", "net_debt"]
+            },
+            "description": "Nome da métrica"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Série temporal da métrica",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeSeriesPoint"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key",
+        "description": "API key para autenticação. Use uma das chaves demo: demo-key-12345 (free), pro-key-67890 (pro), enterprise-key-abc (enterprise)"
+      }
+    },
+    "schemas": {
+      "Company": {
+        "type": "object",
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "example": "PETR4",
+            "description": "Símbolo da empresa na bolsa"
+          },
+          "name": {
+            "type": "string",
+            "example": "Petróleo Brasileiro S.A. - Petrobras",
+            "description": "Nome completo da empresa"
+          },
+          "country": {
+            "type": "string",
+            "example": "BRA",
+            "description": "Código do país"
+          },
+          "sector": {
+            "type": "string",
+            "example": "Energy",
+            "description": "Setor de atuação"
+          },
+          "currency": {
+            "type": "string",
+            "example": "BRL",
+            "description": "Moeda principal"
+          }
+        }
+      },
+      "FinancialMetric": {
+        "type": "object",
+        "properties": {
+          "metric_name": {
+            "type": "string",
+            "example": "net_revenue",
+            "description": "Nome da métrica"
+          },
+          "metric_label": {
+            "type": "string",
+            "example": "Receita Líquida",
+            "description": "Rótulo legível da métrica"
+          },
+          "value": {
+            "type": "number",
+            "example": 125000.00,
+            "description": "Valor da métrica"
+          },
+          "currency": {
+            "type": "string",
+            "example": "BRL",
+            "description": "Moeda do valor"
+          },
+          "unit": {
+            "type": "string",
+            "example": "millions",
+            "description": "Unidade do valor"
+          },
+          "metric_category": {
+            "type": "string",
+            "example": "revenue",
+            "description": "Categoria da métrica"
+          }
+        }
+      },
+      "FinancialPeriod": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "integer",
+            "example": 2025,
+            "description": "Ano do período"
+          },
+          "quarter": {
+            "type": "integer",
+            "example": 2,
+            "description": "Trimestre (1-4)"
+          },
+          "period_label": {
+            "type": "string",
+            "example": "2T25",
+            "description": "Rótulo do período"
+          },
+          "financial_data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FinancialMetric"
+            },
+            "description": "Lista de métricas financeiras do período"
+          }
+        }
+      },
+      "FinancialDataResponse": {
+        "type": "object",
+        "properties": {
+          "company_symbol": {
+            "type": "string",
+            "example": "PETR4"
+          },
+          "company_name": {
+            "type": "string",
+            "example": "Petróleo Brasileiro S.A. - Petrobras"
+          },
+          "periods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FinancialPeriod"
+            }
+          },
+          "total_periods": {
+            "type": "integer",
+            "example": 3
+          },
+          "applied_filters": {
+            "type": "object",
+            "properties": {
+              "years": {"type": "string"},
+              "metrics": {"type": "string"},
+              "limit": {"type": "integer"}
+            }
+          }
+        }
+      },
+      "TimeSeriesPoint": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "integer",
+            "example": 2025
+          },
+          "quarter": {
+            "type": "integer",
+            "example": 2
+          },
+          "period": {
+            "type": "string",
+            "example": "2T25"
+          },
+          "value": {
+            "type": "number",
+            "example": 125000.00
+          },
+          "currency": {
+            "type": "string",
+            "example": "BRL"
+          },
+          "unit": {
+            "type": "string",
+            "example": "millions"
+          },
+          "metric_label": {
+            "type": "string",
+            "example": "Receita Líquida"
+          }
+        }
+      },
+      "HTTPValidationError": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "loc": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {"type": "string"},
+                {"type": "integer"}
+              ]
+            }
+          },
+          "msg": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": ["loc", "msg", "type"]
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "API key ausente ou inválida",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "detail": {
+                  "type": "string",
+                  "example": "API key required. Use header: X-API-Key"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Info",
+      "description": "Informações gerais da API"
+    },
+    {
+      "name": "Health",
+      "description": "Status e saúde da API"
+    },
+    {
+      "name": "Authentication",
+      "description": "Autenticação e registro de usuários"
+    },
+    {
+      "name": "Companies",
+      "description": "Informações sobre empresas"
+    },
+    {
+      "name": "Financial Data",
+      "description": "Dados financeiros e métricas"
+    }
+  ]
+}
