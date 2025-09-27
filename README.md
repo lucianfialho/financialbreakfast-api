@@ -159,4 +159,4 @@ MIT License - See repository for details
 ## 🤝 Support
 
 - **Issues**: https://github.com/lucianfialho/financialbreakfast-api/issues
-- **API Status**: https://financialbreakfast-production.up.railway.app/api/health
+- **API Status**: https://financialbreakfast-production.up.railway.app/api/health# Force redeploy Sat Sep 27 12:59:30 -03 2025
