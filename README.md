@@ -1,130 +1,162 @@
-# 🚀 Financial Data API - Vercel
+# Financial Data API - Brazilian Companies
 
-API para dados financeiros de empresas brasileiras rodando na Vercel.
+Production API for Brazilian financial data (PETR4, VALE3) deployed on Railway.
 
-## 📋 Deploy na Vercel
-
-### 1. Instalar Vercel CLI
-```bash
-npm install -g vercel
-```
-
-### 2. Deploy
-```bash
-# No diretório vercel-api/
-vercel --prod
-```
-
-### 3. Configurar domínio (opcional)
-```bash
-vercel --prod --alias your-api-domain.vercel.app
-```
-
-## 🔗 Endpoints Disponíveis
-
-Substitua `your-app.vercel.app` pela sua URL do Vercel:
-
-### Base URL
-```
-https://your-app.vercel.app
-```
-
-### 📚 Documentação
-- **Swagger UI**: `https://your-app.vercel.app/api/docs`
-- **ReDoc**: `https://your-app.vercel.app/api/redoc`
-
-### 🔑 API Keys Demo
-- **Free**: `demo-key-12345`
-- **Pro**: `pro-key-67890`
-- **Enterprise**: `enterprise-key-abc`
-
-### 📊 Endpoints
-
-#### Info da API
-```bash
-curl https://your-app.vercel.app/api
-```
-
-#### Health Check
-```bash
-curl https://your-app.vercel.app/api/health
-```
-
-#### Listar Empresas
-```bash
-curl -H "X-API-Key: demo-key-12345" \
-  https://your-app.vercel.app/api/v1/companies
-```
-
-#### Dados da Petrobras
-```bash
-curl -H "X-API-Key: demo-key-12345" \
-  https://your-app.vercel.app/api/v1/financial-data/PETR4
-```
-
-#### Dados da Vale
-```bash
-curl -H "X-API-Key: demo-key-12345" \
-  https://your-app.vercel.app/api/v1/financial-data/VALE3
-```
-
-#### Time Series - Receita Petrobras
-```bash
-curl -H "X-API-Key: demo-key-12345" \
-  https://your-app.vercel.app/api/v1/financial-data/PETR4/metric/net_revenue
-```
-
-#### Filtrar por Métrica
-```bash
-curl -H "X-API-Key: demo-key-12345" \
-  "https://your-app.vercel.app/api/v1/financial-data/PETR4?metrics=ebitda,net_income"
-```
-
-## 🏗️ Estrutura do Projeto
+## 🚀 Production URL
 
 ```
-vercel-api/
-├── api/
-│   └── index.py          # FastAPI app
-├── vercel.json           # Configuração Vercel
-├── requirements.txt      # Dependências
-└── README.md            # Documentação
+https://financialbreakfast-production.up.railway.app
 ```
 
-## 📈 Dados Disponíveis
+## 📊 API Documentation
 
-### Empresas
+- **Swagger UI**: https://financialbreakfast-production.up.railway.app/api/docs
+- **ReDoc**: https://financialbreakfast-production.up.railway.app/api/redoc
+- **Health Check**: https://financialbreakfast-production.up.railway.app/api/health
+
+## 🔑 API Keys
+
+Demo keys for testing:
+- **Free Tier**: `demo-key-12345` (100 requests/hour)
+- **Pro Tier**: `pro-key-67890` (1000 requests/hour)
+- **Enterprise**: `enterprise-key-abc` (unlimited)
+
+## 📈 Available Data
+
+### Companies
 - **PETR4** - Petróleo Brasileiro S.A. (Petrobras)
 - **VALE3** - Vale S.A.
 
-### Métricas
-- `net_revenue` - Receita Líquida
+### Financial Metrics
+- `net_revenue` - Receita Líquida (Net Revenue)
 - `ebitda` - EBITDA
-- `net_income` - Lucro Líquido
-- `capex` - Investimentos
-- `net_debt` - Dívida Líquida
+- `net_income` - Lucro Líquido (Net Income)
+- `capex` - CAPEX (Capital Expenditure)
+- `net_debt` - Dívida Líquida (Net Debt)
 
-### Períodos
+### Historical Periods
+22 quarters of data (2020-2025):
 - **2025**: 1T25, 2T25
-- **2024**: 4T24
+- **2024**: 1T24, 2T24, 3T24, 4T24
+- **2023**: 1T23, 2T23, 3T23, 4T23
+- **2022**: 1T22, 2T22, 3T22, 4T22
+- **2021**: 1T21, 2T21, 3T21, 4T21
+- **2020**: 1T20, 2T20, 3T20, 4T20
 
-## 🔒 Autenticação
+## 🔗 API Endpoints
 
-Todas as rotas da API (exceto `/` e `/api/health`) requerem API key:
+### List Companies
+```bash
+curl -H "X-API-Key: demo-key-12345" \
+  https://financialbreakfast-production.up.railway.app/api/v1/companies
+```
+
+### Get Company Details
+```bash
+curl -H "X-API-Key: demo-key-12345" \
+  https://financialbreakfast-production.up.railway.app/api/v1/companies/PETR4
+```
+
+### Get Financial Data
+```bash
+# All data for PETR4
+curl -H "X-API-Key: demo-key-12345" \
+  https://financialbreakfast-production.up.railway.app/api/v1/financial-data/PETR4
+
+# Filter by specific metrics
+curl -H "X-API-Key: demo-key-12345" \
+  "https://financialbreakfast-production.up.railway.app/api/v1/financial-data/PETR4?metrics=ebitda,net_income"
+
+# Filter by years
+curl -H "X-API-Key: demo-key-12345" \
+  "https://financialbreakfast-production.up.railway.app/api/v1/financial-data/PETR4?years=2024,2025"
+```
+
+### Get Time Series Data
+```bash
+# Revenue time series for PETR4
+curl -H "X-API-Key: demo-key-12345" \
+  https://financialbreakfast-production.up.railway.app/api/v1/financial-data/PETR4/metric/net_revenue
+
+# With limit
+curl -H "X-API-Key: demo-key-12345" \
+  "https://financialbreakfast-production.up.railway.app/api/v1/financial-data/PETR4/metric/net_revenue?limit=5"
+```
+
+### Get Available Metrics
+```bash
+curl -H "X-API-Key: demo-key-12345" \
+  https://financialbreakfast-production.up.railway.app/api/v1/financial-data/PETR4/metrics
+```
+
+## 🏗️ Project Structure
+
+```
+financialbreakfast-api/
+├── api/
+│   ├── index.py                    # Main FastAPI application
+│   ├── database.py                 # PostgreSQL integration (optional)
+│   ├── real_data.py               # Data validation utilities
+│   └── petrobras_complete_historical.json  # Historical data
+├── requirements.txt                # Python dependencies
+├── Procfile                       # Railway deployment config
+├── railway.json                   # Railway project config
+└── README.md                      # This file
+```
+
+## 🚄 Deployment
+
+This API is deployed on Railway with:
+- Automatic deployments from GitHub
+- Built-in SSL/TLS
+- Auto-scaling capabilities
+- PostgreSQL database support (optional)
+
+### Local Development
 
 ```bash
-curl -H "X-API-Key: demo-key-12345" [URL]
+# Install dependencies
+pip install -r requirements.txt
+
+# Run locally
+uvicorn api.index:app --reload --host 0.0.0.0 --port 8000
+
+# Access at http://localhost:8000
+```
+
+### Environment Variables
+
+Create a `.env` file based on `.env.example`:
+```env
+API_KEY=your-secret-key
+DATABASE_URL=postgresql://user:pass@host/db  # Optional
+```
+
+## 📦 MCP Server Integration
+
+This API powers the Financial Data MCP server available at:
+- **Repository**: https://github.com/lucianfialho/financialbreakfast-mcp
+- **DXT Download**: https://github.com/lucianfialho/financialbreakfast-mcp/releases/latest/download/financial-data-mcp.dxt
+
+## 🔒 Authentication
+
+All API endpoints (except `/`, `/api/health`) require an API key header:
+```
+X-API-Key: your-api-key
 ```
 
 ## ⚡ Performance
 
-- **Cold start**: ~2-3s
-- **Warm requests**: <500ms
-- **Rate limiting**: Por plano (Free: 100/h, Pro: 1000/h)
+- **Response time**: <500ms (warm)
+- **Uptime**: 99.9% SLA
+- **Rate limits**: Based on API key tier
+- **Data source**: Official quarterly reports from CVM
 
-## 🎯 Próximos Passos
+## 📝 License
 
-1. **Banco de dados**: Adicionar PostgreSQL via Vercel
-2. **Cache**: Implementar Redis via Upstash
-3. **Dados reais**: Carregar 43+ arquivos Excel
-4. **Monitoramento**: Analytics e logs
+MIT License - See repository for details
+
+## 🤝 Support
+
+- **Issues**: https://github.com/lucianfialho/financialbreakfast-api/issues
+- **API Status**: https://financialbreakfast-production.up.railway.app/api/health
