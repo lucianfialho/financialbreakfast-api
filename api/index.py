@@ -266,14 +266,15 @@ def health_check():
     return {
         "status": "healthy",
         "service": "Financial Data API with Semantic Search",
-        "version": "2.1.0",
+        "version": "2.1.1",  # Force redeploy
         "platform": "Railway",
         "features": {
             "financial_data": "✅ Available",
             "semantic_search": "✅ Available" if SEMANTIC_SEARCH_AVAILABLE else "⚠️ Dependencies required",
             "audio_processing": "✅ Available" if SEMANTIC_SEARCH_AVAILABLE else "⚠️ Dependencies required"
         },
-        "uptime": "running"
+        "uptime": "running",
+        "semantic_search_debug": SEMANTIC_SEARCH_AVAILABLE  # Debug info
     }
 
 @app.post("/api/v1/auth/register")
