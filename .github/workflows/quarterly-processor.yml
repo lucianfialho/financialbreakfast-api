@@ -50,7 +50,15 @@ jobs:
       - name: 🔍 Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg
+          sudo apt-get install -y ffmpeg postgresql-client
+
+      - name: 🗄️ Setup database
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          echo "🗄️ Setting up database schema..."
+          psql $DATABASE_URL -f migrations/create_earnings_calls_tables.sql
+          echo "✅ Database setup complete"
 
       - name: 🎙️ Run quarterly processor
         env:
