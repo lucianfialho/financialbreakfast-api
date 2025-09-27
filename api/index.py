@@ -448,6 +448,218 @@ def get_metric_time_series_endpoint(symbol: str, metric_name: str, user = Depend
 
         return time_series
 
+# === SEMANTIC SEARCH ENDPOINTS ===
+
+try:
+    from api.semantic_search import SemanticSearchService
+    from api.audio_downloader import AudioDownloader
+    from api.transcription_service import TranscriptionService
+    from api.analysis_service import AnalysisService
+    semantic_search = SemanticSearchService()
+    SEMANTIC_SEARCH_AVAILABLE = True
+except ImportError:
+    SEMANTIC_SEARCH_AVAILABLE = False
+
+@app.get("/api/v1/earnings-calls/search")
+def semantic_search_endpoint(
+    query: str,
+    company: Optional[str] = None,
+    limit: int = 10,
+    threshold: float = 0.5,
+    user = Depends(verify_api_key)
+):
+    """
+    Busca semântica em transcrições de teleconferências
+
+    Args:
+        query: Texto da consulta
+        company: Filtro por empresa (opcional)
+        limit: Número máximo de resultados (padrão: 10)
+        threshold: Limiar de similaridade 0-1 (padrão: 0.5)
+    """
+    if not SEMANTIC_SEARCH_AVAILABLE:
+        raise HTTPException(
+            status_code=503,
+            detail="Semantic search service not available. Please install required dependencies."
+        )
+
+    try:
+        results = semantic_search.search_similar_segments(
+            query=query,
+            company_symbol=company.upper() if company else None,
+            limit=limit,
+            threshold=threshold
+        )
+
+        return {
+            "query": query,
+            "filters": {
+                "company": company,
+                "threshold": threshold
+            },
+            "total_results": len(results),
+            "results": results
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}")
+
+@app.get("/api/v1/earnings-calls/search-topic")
+def search_by_topic_endpoint(
+    topic: str,
+    company: Optional[str] = None,
+    year: Optional[int] = None,
+    limit: int = 20,
+    user = Depends(verify_api_key)
+):
+    """
+    Busca por tópico/palavra-chave nas transcrições
+
+    Args:
+        topic: Tópico ou palavra-chave
+        company: Filtro por empresa (opcional)
+        year: Filtro por ano (opcional)
+        limit: Número máximo de resultados (padrão: 20)
+    """
+    if not SEMANTIC_SEARCH_AVAILABLE:
+        raise HTTPException(
+            status_code=503,
+            detail="Semantic search service not available."
+        )
+
+    try:
+        results = semantic_search.search_by_topic(
+            topic=topic,
+            company_symbol=company.upper() if company else None,
+            year=year,
+            limit=limit
+        )
+
+        return {
+            "topic": topic,
+            "filters": {
+                "company": company,
+                "year": year
+            },
+            "total_results": len(results),
+            "results": results
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Topic search failed: {str(e)}")
+
+@app.get("/api/v1/earnings-calls/{company}/sentiment-timeline")
+def sentiment_timeline_endpoint(
+    company: str,
+    start_year: Optional[int] = None,
+    end_year: Optional[int] = None,
+    user = Depends(verify_api_key)
+):
+    """
+    Timeline de sentimento para uma empresa
+
+    Args:
+        company: Símbolo da empresa
+        start_year: Ano inicial (opcional)
+        end_year: Ano final (opcional)
+    """
+    if not SEMANTIC_SEARCH_AVAILABLE:
+        raise HTTPException(
+            status_code=503,
+            detail="Semantic search service not available."
+        )
+
+    try:
+        timeline = semantic_search.get_sentiment_timeline(
+            company_symbol=company.upper(),
+            start_year=start_year,
+            end_year=end_year
+        )
+
+        return {
+            "company": company.upper(),
+            "period_range": {
+                "start_year": start_year,
+                "end_year": end_year
+            },
+            "total_periods": len(timeline),
+            "timeline": timeline
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Timeline retrieval failed: {str(e)}")
+
+@app.get("/api/v1/earnings-calls/{company}/{year}Q{quarter}/highlights")
+def call_highlights_endpoint(
+    company: str,
+    year: int,
+    quarter: int,
+    user = Depends(verify_api_key)
+):
+    """
+    Destaques de uma teleconferência específica
+
+    Args:
+        company: Símbolo da empresa
+        year: Ano
+        quarter: Trimestre (1-4)
+    """
+    if not SEMANTIC_SEARCH_AVAILABLE:
+        raise HTTPException(
+            status_code=503,
+            detail="Semantic search service not available."
+        )
+
+    try:
+        highlights = semantic_search.get_call_highlights(
+            company_symbol=company.upper(),
+            year=year,
+            quarter=quarter
+        )
+
+        if "error" in highlights:
+            raise HTTPException(status_code=404, detail=highlights["error"])
+
+        return highlights
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Highlights retrieval failed: {str(e)}")
+
+@app.post("/api/v1/earnings-calls/process")
+def process_audio_endpoint(
+    mode: str = "latest",  # "latest" or "all"
+    company: str = "PETR4",
+    payload_file: Optional[str] = None,
+    user = Depends(verify_api_key)
+):
+    """
+    Processar arquivos de áudio de teleconferências
+
+    Args:
+        mode: "latest" para apenas o mais recente, "all" para todos
+        company: Símbolo da empresa
+        payload_file: Caminho para arquivo de payload (opcional)
+    """
+    if not SEMANTIC_SEARCH_AVAILABLE:
+        raise HTTPException(
+            status_code=503,
+            detail="Audio processing service not available."
+        )
+
+    # This endpoint would be implemented to handle the full pipeline
+    # For now, return a placeholder response
+    return {
+        "message": "Audio processing pipeline ready",
+        "mode": mode,
+        "company": company.upper(),
+        "status": "Service configured but processing not yet implemented",
+        "next_steps": [
+            "Upload payload file with audio URLs",
+            "Download audio files",
+            "Transcribe using Whisper",
+            "Analyze sentiment and generate embeddings",
+            "Store in database for semantic search"
+        ]
+    }
+
 # Handler para Vercel
 def handler(request):
     """Handler para Vercel serverless"""
