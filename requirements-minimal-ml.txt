@@ -1,0 +1,15 @@
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+psycopg2-binary==2.9.10
+python-multipart==0.0.17
+pydantic==2.10.3
+python-dotenv==1.0.1
+requests==2.31.0
+
+# Minimal ML dependencies for Railway (most stable versions)
+sentence-transformers==2.2.2
+transformers==4.21.3
+torch==1.12.1
+numpy==1.21.6
+scipy==1.9.3
+scikit-learn==1.1.3
