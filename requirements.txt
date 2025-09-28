@@ -6,6 +6,10 @@ pydantic==2.10.3
 python-dotenv==1.0.1
 requests==2.31.0
 
+# Audio processing and ML dependencies
+openai>=1.30.0
+pydub==0.25.1
+
 # Semantic search dependencies (simplified for Railway)
 sentence-transformers==2.2.2
 textblob==0.17.1
