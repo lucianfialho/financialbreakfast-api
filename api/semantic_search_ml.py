@@ -28,7 +28,7 @@ except ImportError:
 class SemanticSearchService:
     """Service for semantic search on earnings call transcriptions with ML embeddings"""
 
-    def __init__(self, model_name: str = "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"):
+    def __init__(self, model_name: str = "sentence-transformers/all-MiniLM-L6-v2"):
         """
         Initialize semantic search service with caching
 
