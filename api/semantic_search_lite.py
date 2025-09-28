@@ -5,7 +5,10 @@ Works without ML dependencies for Railway deployment
 
 from typing import List, Dict, Optional
 import json
-from api.db_utils import get_db_cursor
+try:
+    from api.database import get_db_cursor
+except ImportError:
+    from database import get_db_cursor
 
 
 class SemanticSearchService:

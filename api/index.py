@@ -476,6 +476,14 @@ except ImportError as e:
         print(f"❌ Semantic search completely unavailable: {e2}")
         SEMANTIC_SEARCH_AVAILABLE = False
 
+# Import admin router
+try:
+    from api.admin import router as admin_router
+    app.include_router(admin_router, prefix="/api/v1")
+    print("✅ Admin endpoints available")
+except ImportError as e:
+    print(f"⚠️ Admin endpoints not available: {e}")
+
 # Optional imports for audio processing
 try:
     from api.audio_downloader import AudioDownloader
