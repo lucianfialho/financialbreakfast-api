@@ -685,21 +685,202 @@ def process_audio_endpoint(
             detail="Audio processing service not available."
         )
 
-    # This endpoint would be implemented to handle the full pipeline
-    # For now, return a placeholder response
-    return {
-        "message": "Audio processing pipeline ready",
-        "mode": mode,
-        "company": company.upper(),
-        "status": "Service configured but processing not yet implemented",
-        "next_steps": [
-            "Upload payload file with audio URLs",
-            "Download audio files",
-            "Transcribe using Whisper",
-            "Analyze sentiment and generate embeddings",
-            "Store in database for semantic search"
+    # Insert mock data for testing
+    try:
+        # Import here to avoid dependency issues
+        from api.database import get_db_cursor
+        from api.semantic_search_ml import SemanticSearchService
+        import json
+        from datetime import datetime
+
+        # Sample transcript data
+        sample_transcript = """
+        Boa tarde e bem-vindos à teleconferência de resultados da Petrobras do segundo trimestre de 2025.
+
+        Nossos resultados do segundo trimestre foram excepcionais, com receita líquida de R$ 123 bilhões,
+        representando um crescimento de 15% em relação ao trimestre anterior.
+
+        A produção de petróleo atingiu 2.8 milhões de barris por dia, um recorde histórico.
+        Nosso EBITDA alcançou R$ 45 bilhões, superando todas as expectativas do mercado.
+
+        Investimos R$ 8 bilhões em novos projetos de exploração no pré-sal, que devem aumentar
+        significativamente nossa capacidade produtiva nos próximos trimestres.
+
+        Aprovamos o pagamento de dividendos extraordinários de R$ 2.50 por ação, demonstrando
+        nossa confiança na geração de caixa sustentável.
+
+        Sobre perspectivas futuras, esperamos manter o crescimento da produção e melhorar ainda mais
+        nossa eficiência operacional. Os preços do petróleo permanecem favoráveis e nossa posição
+        competitiva no mercado internacional continua se fortalecendo.
+
+        Agradecemos a todos os investidores pela confiança e estamos à disposição para perguntas.
+        """
+
+        # Sample call segments
+        segments_data = [
+            {
+                "text": "Nossos resultados do segundo trimestre foram excepcionais, com receita líquida de R$ 123 bilhões, representando um crescimento de 15% em relação ao trimestre anterior.",
+                "speaker": "CEO",
+                "timestamp": "00:02:30",
+                "sentiment": "positive",
+                "topics": ["receita", "resultados", "crescimento"],
+                "key_points": ["receita R$ 123 bilhões", "crescimento 15%"]
+            },
+            {
+                "text": "A produção de petróleo atingiu 2.8 milhões de barris por dia, um recorde histórico. Nosso EBITDA alcançou R$ 45 bilhões, superando todas as expectativas do mercado.",
+                "speaker": "CFO",
+                "timestamp": "00:05:15",
+                "sentiment": "positive",
+                "topics": ["produção", "petróleo", "ebitda", "recordes"],
+                "key_points": ["2.8 milhões barris/dia", "EBITDA R$ 45 bilhões", "recorde histórico"]
+            },
+            {
+                "text": "Investimos R$ 8 bilhões em novos projetos de exploração no pré-sal, que devem aumentar significativamente nossa capacidade produtiva nos próximos trimestres.",
+                "speaker": "COO",
+                "timestamp": "00:08:45",
+                "sentiment": "positive",
+                "topics": ["investimentos", "pré-sal", "exploração", "capacidade"],
+                "key_points": ["R$ 8 bilhões investimento", "projetos pré-sal", "aumento capacidade"]
+            },
+            {
+                "text": "Aprovamos o pagamento de dividendos extraordinários de R$ 2.50 por ação, demonstrando nossa confiança na geração de caixa sustentável.",
+                "speaker": "CFO",
+                "timestamp": "00:12:30",
+                "sentiment": "positive",
+                "topics": ["dividendos", "caixa", "sustentabilidade"],
+                "key_points": ["dividendos R$ 2.50 por ação", "geração de caixa"]
+            }
         ]
-    }
+
+        # Initialize semantic search for embeddings
+        search_service = SemanticSearchService()
+
+        with get_db_cursor() as cursor:
+            # Insert main earnings call record
+            cursor.execute("""
+                INSERT INTO earnings_calls (company_symbol, call_date, year, quarter, transcript_text, processed_at)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                ON CONFLICT (company_symbol, year, quarter) DO UPDATE SET
+                    transcript_text = EXCLUDED.transcript_text,
+                    processed_at = EXCLUDED.processed_at
+                RETURNING id
+            """, (company.upper(), "2025-08-08", 2025, 2, sample_transcript, datetime.now()))
+
+            call_record = cursor.fetchone()
+            call_id = call_record[0] if call_record else None
+
+            if call_id:
+                # Clear existing segments for this call
+                cursor.execute("DELETE FROM call_segments WHERE call_id = %s", (call_id,))
+
+                # Insert call segments with embeddings
+                for i, segment in enumerate(segments_data):
+                    # Generate embedding for the segment text
+                    try:
+                        embedding = search_service.get_embeddings([segment["text"]])[0]
+                        embedding_list = embedding.tolist() if hasattr(embedding, 'tolist') else list(embedding)
+                    except:
+                        # Fallback if embedding generation fails
+                        embedding_list = [0.0] * 768
+
+                    cursor.execute("""
+                        INSERT INTO call_segments (
+                            call_id, segment_order, speaker, text_content,
+                            timestamp_start, sentiment_score, topics,
+                            key_points, embedding_vector
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    """, (
+                        call_id, i + 1, segment["speaker"], segment["text"],
+                        segment["timestamp"], 0.8 if segment["sentiment"] == "positive" else 0.5,
+                        json.dumps(segment["topics"]), json.dumps(segment["key_points"]),
+                        json.dumps(embedding_list)
+                    ))
+
+                # Insert call insights summary
+                cursor.execute("""
+                    INSERT INTO call_insights (call_id, overall_sentiment, key_topics, summary, highlights, risks_mentioned, opportunities_mentioned)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (call_id) DO UPDATE SET
+                        overall_sentiment = EXCLUDED.overall_sentiment,
+                        key_topics = EXCLUDED.key_topics,
+                        summary = EXCLUDED.summary,
+                        highlights = EXCLUDED.highlights,
+                        risks_mentioned = EXCLUDED.risks_mentioned,
+                        opportunities_mentioned = EXCLUDED.opportunities_mentioned
+                """, (
+                    call_id, 0.85,
+                    json.dumps(["receita", "produção", "investimentos", "dividendos"]),
+                    "Resultados excepcionais do 2T25 com receita de R$ 123 bilhões e EBITDA de R$ 45 bilhões. Produção recorde e investimentos em pré-sal.",
+                    json.dumps([
+                        "Receita líquida de R$ 123 bilhões (+15%)",
+                        "Produção recorde de 2.8M barris/dia",
+                        "EBITDA de R$ 45 bilhões",
+                        "Investimento de R$ 8 bilhões em pré-sal",
+                        "Dividendos de R$ 2.50 por ação"
+                    ]),
+                    json.dumps([]),  # No risks mentioned in this sample
+                    json.dumps([
+                        "Crescimento da produção",
+                        "Melhoria da eficiência operacional",
+                        "Posição competitiva internacional"
+                    ])
+                ))
+
+            # Also add a VALE3 sample
+            cursor.execute("""
+                INSERT INTO earnings_calls (company_symbol, call_date, year, quarter, transcript_text, processed_at)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                ON CONFLICT (company_symbol, year, quarter) DO UPDATE SET
+                    transcript_text = EXCLUDED.transcript_text,
+                    processed_at = EXCLUDED.processed_at
+                RETURNING id
+            """, ("VALE3", "2025-08-10", 2025, 2,
+                "Resultados da Vale no segundo trimestre de 2025 mostram produção de minério de ferro de 85 milhões de toneladas. Preços do minério permanecem estáveis e investimentos em sustentabilidade continuam.",
+                datetime.now()))
+
+            vale_record = cursor.fetchone()
+            if vale_record:
+                vale_id = vale_record[0]
+                cursor.execute("""
+                    INSERT INTO call_segments (call_id, segment_order, speaker, text_content, timestamp_start, sentiment_score, topics, key_points, embedding_vector)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    ON CONFLICT DO NOTHING
+                """, (
+                    vale_id, 1, "CEO",
+                    "Produção de minério de ferro atingiu 85 milhões de toneladas no segundo trimestre",
+                    "00:03:00", 0.7,
+                    json.dumps(["produção", "minério", "ferro"]),
+                    json.dumps(["85 milhões toneladas", "segundo trimestre"]),
+                    json.dumps([0.1] * 768)  # Simple embedding
+                ))
+
+        return {
+            "message": "Mock data inserted successfully!",
+            "mode": mode,
+            "company": company.upper(),
+            "status": "Sample earnings call data populated",
+            "data_inserted": {
+                "earnings_calls": 2,
+                "call_segments": len(segments_data) + 1,
+                "companies": ["PETR4", "VALE3"],
+                "sample_queries": [
+                    "produção",
+                    "receita",
+                    "investimentos",
+                    "dividendos",
+                    "pré-sal"
+                ]
+            }
+        }
+
+    except Exception as e:
+        return {
+            "message": "Failed to insert mock data",
+            "error": str(e),
+            "mode": mode,
+            "company": company.upper(),
+            "status": "Error during data insertion"
+        }
 
 # Handler para Vercel
 def handler(request):
