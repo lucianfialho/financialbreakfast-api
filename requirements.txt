@@ -6,8 +6,8 @@ pydantic==2.10.3
 python-dotenv==1.0.1
 requests==2.31.0
 
-# Semantic search dependencies (Railway-compatible versions)
-sentence-transformers>=2.2.0,<3.0.0
-textblob>=0.17.0,<1.0.0
-nltk>=3.8.0,<4.0.0
-numpy>=1.21.0,<2.0.0
+# Semantic search dependencies (simplified for Railway)
+sentence-transformers==2.2.2
+textblob==0.17.1
+nltk==3.8.1
+# numpy is installed as a dependency of sentence-transformers
