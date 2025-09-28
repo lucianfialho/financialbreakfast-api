@@ -458,12 +458,19 @@ def get_metric_time_series_endpoint(symbol: str, metric_name: str, user = Depend
 
 try:
     from api.semantic_search import SemanticSearchService
-    from api.audio_downloader import AudioDownloader
-    from api.transcription_service import TranscriptionService
-    from api.analysis_service import AnalysisService
     semantic_search = SemanticSearchService()
     SEMANTIC_SEARCH_AVAILABLE = True
-except ImportError:
+
+    # Optional imports - don't block if they fail
+    try:
+        from api.audio_downloader import AudioDownloader
+        from api.transcription_service import TranscriptionService
+        from api.analysis_service import AnalysisService
+    except ImportError:
+        pass  # Audio processing not available, but search still works
+
+except ImportError as e:
+    print(f"Semantic search not available: {e}")
     SEMANTIC_SEARCH_AVAILABLE = False
 
 @app.get("/api/v1/earnings-calls/search")
