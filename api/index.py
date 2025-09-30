@@ -693,6 +693,46 @@ def process_audio_endpoint(
         import json
         from datetime import datetime
 
+        # First, ensure tables exist
+        with get_db_cursor() as cursor:
+            # Create tables if they don't exist
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS earnings_calls (
+                    id SERIAL PRIMARY KEY,
+                    company_symbol VARCHAR(10) NOT NULL,
+                    call_date DATE NOT NULL,
+                    year INTEGER NOT NULL,
+                    quarter INTEGER NOT NULL,
+                    transcript_text TEXT,
+                    processed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    UNIQUE(company_symbol, year, quarter)
+                );
+
+                CREATE TABLE IF NOT EXISTS call_segments (
+                    id SERIAL PRIMARY KEY,
+                    call_id INTEGER REFERENCES earnings_calls(id) ON DELETE CASCADE,
+                    segment_order INTEGER NOT NULL,
+                    speaker VARCHAR(100),
+                    text_content TEXT NOT NULL,
+                    timestamp_start VARCHAR(20),
+                    sentiment_score FLOAT DEFAULT 0.5,
+                    topics TEXT, -- JSON array
+                    key_points TEXT, -- JSON array
+                    embedding_vector TEXT -- JSON array for now
+                );
+
+                CREATE TABLE IF NOT EXISTS call_insights (
+                    id SERIAL PRIMARY KEY,
+                    call_id INTEGER REFERENCES earnings_calls(id) ON DELETE CASCADE UNIQUE,
+                    overall_sentiment FLOAT DEFAULT 0.5,
+                    key_topics TEXT, -- JSON array
+                    summary TEXT,
+                    highlights TEXT, -- JSON array
+                    risks_mentioned TEXT, -- JSON array
+                    opportunities_mentioned TEXT -- JSON array
+                );
+            """)
+
         # Sample transcript data
         sample_transcript = """
         Boa tarde e bem-vindos à teleconferência de resultados da Petrobras do segundo trimestre de 2025.
