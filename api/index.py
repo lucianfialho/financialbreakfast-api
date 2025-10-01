@@ -695,7 +695,7 @@ def process_audio_endpoint(
 
         # First, ensure tables exist
         with get_db_cursor() as cursor:
-            # Create tables if they don't exist
+            # Create tables if they don't exist - execute separately
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS earnings_calls (
                     id SERIAL PRIMARY KEY,
@@ -706,8 +706,10 @@ def process_audio_endpoint(
                     transcript_text TEXT,
                     processed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     UNIQUE(company_symbol, year, quarter)
-                );
+                )
+            """)
 
+            cursor.execute("""
                 CREATE TABLE IF NOT EXISTS call_segments (
                     id SERIAL PRIMARY KEY,
                     call_id INTEGER REFERENCES earnings_calls(id) ON DELETE CASCADE,
@@ -716,21 +718,23 @@ def process_audio_endpoint(
                     text_content TEXT NOT NULL,
                     timestamp_start VARCHAR(20),
                     sentiment_score FLOAT DEFAULT 0.5,
-                    topics TEXT, -- JSON array
-                    key_points TEXT, -- JSON array
-                    embedding_vector TEXT -- JSON array for now
-                );
+                    topics TEXT,
+                    key_points TEXT,
+                    embedding_vector TEXT
+                )
+            """)
 
+            cursor.execute("""
                 CREATE TABLE IF NOT EXISTS call_insights (
                     id SERIAL PRIMARY KEY,
                     call_id INTEGER REFERENCES earnings_calls(id) ON DELETE CASCADE UNIQUE,
                     overall_sentiment FLOAT DEFAULT 0.5,
-                    key_topics TEXT, -- JSON array
+                    key_topics TEXT,
                     summary TEXT,
-                    highlights TEXT, -- JSON array
-                    risks_mentioned TEXT, -- JSON array
-                    opportunities_mentioned TEXT -- JSON array
-                );
+                    highlights TEXT,
+                    risks_mentioned TEXT,
+                    opportunities_mentioned TEXT
+                )
             """)
 
         # Sample transcript data
