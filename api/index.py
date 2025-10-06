@@ -689,7 +689,6 @@ def process_audio_endpoint(
     try:
         # Import here to avoid dependency issues
         from api.database import get_db_cursor
-        from api.semantic_search_ml import SemanticSearchService
         import json
         from datetime import datetime
 
@@ -796,9 +795,6 @@ def process_audio_endpoint(
             }
         ]
 
-        # Initialize semantic search for embeddings
-        search_service = SemanticSearchService()
-
         with get_db_cursor() as cursor:
             # Insert main earnings call record
             cursor.execute("""
@@ -819,13 +815,8 @@ def process_audio_endpoint(
 
                 # Insert call segments with embeddings
                 for i, segment in enumerate(segments_data):
-                    # Generate embedding for the segment text
-                    try:
-                        embedding = search_service.get_embeddings([segment["text"]])[0]
-                        embedding_list = embedding.tolist() if hasattr(embedding, 'tolist') else list(embedding)
-                    except:
-                        # Fallback if embedding generation fails
-                        embedding_list = [0.0] * 768
+                    # Use simple fake embeddings for now
+                    embedding_list = [0.1] * 768
 
                     cursor.execute("""
                         INSERT INTO call_segments (
