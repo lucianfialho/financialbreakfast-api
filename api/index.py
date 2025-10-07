@@ -692,49 +692,6 @@ def process_audio_endpoint(
         import json
         from datetime import datetime
 
-        # First, ensure tables exist
-        with get_db_cursor() as cursor:
-            # Create tables if they don't exist - execute separately
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS earnings_calls (
-                    id SERIAL PRIMARY KEY,
-                    company_symbol VARCHAR(10) NOT NULL,
-                    call_date DATE NOT NULL,
-                    year INTEGER NOT NULL,
-                    quarter INTEGER NOT NULL,
-                    transcript_text TEXT,
-                    processed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    UNIQUE(company_symbol, year, quarter)
-                )
-            """)
-
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS call_segments (
-                    id SERIAL PRIMARY KEY,
-                    call_id INTEGER REFERENCES earnings_calls(id) ON DELETE CASCADE,
-                    segment_order INTEGER NOT NULL,
-                    speaker VARCHAR(100),
-                    text_content TEXT NOT NULL,
-                    timestamp_start VARCHAR(20),
-                    sentiment_score FLOAT DEFAULT 0.5,
-                    topics TEXT,
-                    key_points TEXT,
-                    embedding_vector TEXT
-                )
-            """)
-
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS call_insights (
-                    id SERIAL PRIMARY KEY,
-                    call_id INTEGER REFERENCES earnings_calls(id) ON DELETE CASCADE UNIQUE,
-                    overall_sentiment FLOAT DEFAULT 0.5,
-                    key_topics TEXT,
-                    summary TEXT,
-                    highlights TEXT,
-                    risks_mentioned TEXT,
-                    opportunities_mentioned TEXT
-                )
-            """)
 
         # Sample transcript data
         sample_transcript = """
@@ -796,6 +753,11 @@ def process_audio_endpoint(
         ]
 
         with get_db_cursor() as cursor:
+            # Create tables first
+            cursor.execute("CREATE TABLE IF NOT EXISTS earnings_calls (id SERIAL PRIMARY KEY, company_symbol VARCHAR(10) NOT NULL, call_date DATE NOT NULL, year INTEGER NOT NULL, quarter INTEGER NOT NULL, transcript_text TEXT, processed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE(company_symbol, year, quarter))")
+            cursor.execute("CREATE TABLE IF NOT EXISTS call_segments (id SERIAL PRIMARY KEY, call_id INTEGER REFERENCES earnings_calls(id) ON DELETE CASCADE, segment_order INTEGER NOT NULL, speaker VARCHAR(100), text_content TEXT NOT NULL, timestamp_start VARCHAR(20), sentiment_score FLOAT DEFAULT 0.5, topics TEXT, key_points TEXT, embedding_vector TEXT)")
+            cursor.execute("CREATE TABLE IF NOT EXISTS call_insights (id SERIAL PRIMARY KEY, call_id INTEGER REFERENCES earnings_calls(id) ON DELETE CASCADE UNIQUE, overall_sentiment FLOAT DEFAULT 0.5, key_topics TEXT, summary TEXT, highlights TEXT, risks_mentioned TEXT, opportunities_mentioned TEXT)")
+
             # Insert main earnings call record
             cursor.execute("""
                 INSERT INTO earnings_calls (company_symbol, call_date, year, quarter, transcript_text, processed_at)
