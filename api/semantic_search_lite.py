@@ -41,7 +41,7 @@ class SemanticSearchService:
         sql = """
         SELECT
             cs.id,
-            cs.segment_text,
+            cs.text_content,
             cs.timestamp_start,
             cs.timestamp_end,
             cs.sentiment_score,
@@ -53,11 +53,11 @@ class SemanticSearchService:
             ec.quarter,
             CONCAT(ec.quarter, 'T', SUBSTRING(ec.year::TEXT, 3, 2)) as period_label,
             ec.call_date,
-            ts_rank(to_tsvector('portuguese', cs.segment_text), plainto_tsquery('portuguese', %s)) as similarity
+            ts_rank(to_tsvector('portuguese', cs.text_content), plainto_tsquery('portuguese', %s)) as similarity
         FROM call_segments cs
         JOIN earnings_calls ec ON cs.call_id = ec.id
         WHERE
-            to_tsvector('portuguese', cs.segment_text) @@ plainto_tsquery('portuguese', %s)
+            to_tsvector('portuguese', cs.text_content) @@ plainto_tsquery('portuguese', %s)
         """
 
         params = [query, query]
@@ -82,7 +82,7 @@ class SemanticSearchService:
         for row in results:
             segments.append({
                 "id": row["id"],
-                "text": row["segment_text"],
+                "text": row["text_content"],
                 "timestamp": {
                     "start": row["timestamp_start"],
                     "end": row["timestamp_end"]
@@ -208,7 +208,7 @@ class SemanticSearchService:
 
         # Get most positive segments
         sql = """
-        SELECT segment_text, sentiment_score, timestamp_start
+        SELECT text_content, sentiment_score, timestamp_start
         FROM call_segments
         WHERE call_id = %s AND sentiment_score IS NOT NULL
         ORDER BY sentiment_score DESC
@@ -220,7 +220,7 @@ class SemanticSearchService:
 
         # Get most negative segments
         sql = """
-        SELECT segment_text, sentiment_score, timestamp_start
+        SELECT text_content, sentiment_score, timestamp_start
         FROM call_segments
         WHERE call_id = %s AND sentiment_score IS NOT NULL
         ORDER BY sentiment_score ASC
@@ -247,7 +247,7 @@ class SemanticSearchService:
             },
             "top_positive_moments": [
                 {
-                    "text": seg["segment_text"],
+                    "text": seg["text_content"],
                     "sentiment": float(seg["sentiment_score"]),
                     "timestamp": float(seg["timestamp_start"])
                 }
@@ -255,7 +255,7 @@ class SemanticSearchService:
             ],
             "top_negative_moments": [
                 {
-                    "text": seg["segment_text"],
+                    "text": seg["text_content"],
                     "sentiment": float(seg["sentiment_score"]),
                     "timestamp": float(seg["timestamp_start"])
                 }

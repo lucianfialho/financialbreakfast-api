@@ -119,7 +119,7 @@ class SemanticSearchService:
         sql = """
         SELECT
             cs.id,
-            cs.segment_text,
+            cs.text_content,
             cs.timestamp_start,
             cs.timestamp_end,
             cs.sentiment_score,
@@ -133,7 +133,7 @@ class SemanticSearchService:
             ec.call_date
         FROM call_segments cs
         JOIN earnings_calls ec ON cs.call_id = ec.id
-        WHERE cs.segment_text IS NOT NULL AND LENGTH(cs.segment_text) > 10
+        WHERE cs.text_content IS NOT NULL AND LENGTH(cs.text_content) > 10
         """
 
         params = []
@@ -152,7 +152,7 @@ class SemanticSearchService:
         # Calculate similarities
         scored_results = []
         for row in results:
-            text_embedding = self._get_embedding(row["segment_text"])
+            text_embedding = self._get_embedding(row["text_content"])
 
             if text_embedding is not None:
                 similarity = self._cosine_similarity(query_embedding, text_embedding)
@@ -173,7 +173,7 @@ class SemanticSearchService:
             row = item["data"]
             segments.append({
                 "id": row["id"],
-                "text": row["segment_text"],
+                "text": row["text_content"],
                 "timestamp": {
                     "start": row["timestamp_start"],
                     "end": row["timestamp_end"]
@@ -205,7 +205,7 @@ class SemanticSearchService:
         sql = """
         SELECT
             cs.id,
-            cs.segment_text,
+            cs.text_content,
             cs.timestamp_start,
             cs.timestamp_end,
             cs.sentiment_score,
@@ -217,11 +217,11 @@ class SemanticSearchService:
             ec.quarter,
             CONCAT(ec.quarter, 'T', SUBSTRING(ec.year::TEXT, 3, 2)) as period_label,
             ec.call_date,
-            ts_rank(to_tsvector('portuguese', cs.segment_text), plainto_tsquery('portuguese', %s)) as similarity
+            ts_rank(to_tsvector('portuguese', cs.text_content), plainto_tsquery('portuguese', %s)) as similarity
         FROM call_segments cs
         JOIN earnings_calls ec ON cs.call_id = ec.id
         WHERE
-            to_tsvector('portuguese', cs.segment_text) @@ plainto_tsquery('portuguese', %s)
+            to_tsvector('portuguese', cs.text_content) @@ plainto_tsquery('portuguese', %s)
         """
 
         params = [query, query]
@@ -246,7 +246,7 @@ class SemanticSearchService:
         for row in results:
             segments.append({
                 "id": row["id"],
-                "text": row["segment_text"],
+                "text": row["text_content"],
                 "timestamp": {
                     "start": row["timestamp_start"],
                     "end": row["timestamp_end"]
@@ -380,7 +380,7 @@ class SemanticSearchService:
             # Get most positive and negative segments
             cursor.execute("""
                 SELECT
-                    segment_text,
+                    text_content,
                     sentiment_score,
                     sentiment_label,
                     timestamp_start,
@@ -395,7 +395,7 @@ class SemanticSearchService:
 
             cursor.execute("""
                 SELECT
-                    segment_text,
+                    text_content,
                     sentiment_score,
                     sentiment_label,
                     timestamp_start,
@@ -420,7 +420,7 @@ class SemanticSearchService:
             "ml_enabled": self.embedding_model is not None,
             "positive_highlights": [
                 {
-                    "text": seg["segment_text"][:300] + "...",
+                    "text": seg["text_content"][:300] + "...",
                     "sentiment_score": seg["sentiment_score"],
                     "timestamp": seg["timestamp_start"],
                     "keywords": seg["keywords"] or []
@@ -429,7 +429,7 @@ class SemanticSearchService:
             ],
             "negative_highlights": [
                 {
-                    "text": seg["segment_text"][:300] + "...",
+                    "text": seg["text_content"][:300] + "...",
                     "sentiment_score": seg["sentiment_score"],
                     "timestamp": seg["timestamp_start"],
                     "keywords": seg["keywords"] or []

@@ -49,7 +49,7 @@ class SemanticSearchService:
         sql = """
         SELECT
             cs.id,
-            cs.segment_text,
+            cs.text_content,
             cs.timestamp_start,
             cs.timestamp_end,
             cs.sentiment_score,
@@ -61,11 +61,11 @@ class SemanticSearchService:
             ec.quarter,
             CONCAT(ec.quarter, 'T', SUBSTRING(ec.year::TEXT, 3, 2)) as period_label,
             ec.call_date,
-            ts_rank(to_tsvector('portuguese', cs.segment_text), plainto_tsquery('portuguese', %s)) as similarity
+            ts_rank(to_tsvector('portuguese', cs.text_content), plainto_tsquery('portuguese', %s)) as similarity
         FROM call_segments cs
         JOIN earnings_calls ec ON cs.call_id = ec.id
         WHERE
-            to_tsvector('portuguese', cs.segment_text) @@ plainto_tsquery('portuguese', %s)
+            to_tsvector('portuguese', cs.text_content) @@ plainto_tsquery('portuguese', %s)
         """
 
         params = [query, query]
@@ -90,7 +90,7 @@ class SemanticSearchService:
         for row in results:
             segments.append({
                 "id": row["id"],
-                "text": row["segment_text"],
+                "text": row["text_content"],
                 "timestamp": {
                     "start": row["timestamp_start"],
                     "end": row["timestamp_end"]
@@ -133,7 +133,7 @@ class SemanticSearchService:
         sql = """
         SELECT
             cs.id,
-            cs.segment_text,
+            cs.text_content,
             cs.timestamp_start,
             cs.timestamp_end,
             cs.sentiment_score,
@@ -143,12 +143,12 @@ class SemanticSearchService:
             ec.year,
             ec.quarter,
             CONCAT(ec.quarter, 'T', SUBSTRING(ec.year::TEXT, 3, 2)) as period_label,
-            ts_rank(to_tsvector('portuguese', cs.segment_text),
+            ts_rank(to_tsvector('portuguese', cs.text_content),
                     to_tsquery('portuguese', %s)) as relevance
         FROM call_segments cs
         JOIN earnings_calls ec ON cs.call_id = ec.id
         WHERE
-            to_tsvector('portuguese', cs.segment_text) @@ to_tsquery('portuguese', %s)
+            to_tsvector('portuguese', cs.text_content) @@ to_tsquery('portuguese', %s)
         """
 
         # Process query for full-text search
@@ -179,7 +179,7 @@ class SemanticSearchService:
         for row in results:
             segments.append({
                 "id": row["id"],
-                "text": row["segment_text"],
+                "text": row["text_content"],
                 "timestamp": {
                     "start": row["timestamp_start"],
                     "end": row["timestamp_end"]
@@ -315,7 +315,7 @@ class SemanticSearchService:
             # Get most positive and negative segments
             cursor.execute("""
                 SELECT
-                    segment_text,
+                    text_content,
                     sentiment_score,
                     sentiment_label,
                     timestamp_start,
@@ -330,7 +330,7 @@ class SemanticSearchService:
 
             cursor.execute("""
                 SELECT
-                    segment_text,
+                    text_content,
                     sentiment_score,
                     sentiment_label,
                     timestamp_start,
@@ -354,7 +354,7 @@ class SemanticSearchService:
             "summary": insights["summary_text"] if insights else None,
             "positive_highlights": [
                 {
-                    "text": seg["segment_text"][:300] + "...",
+                    "text": seg["text_content"][:300] + "...",
                     "sentiment_score": seg["sentiment_score"],
                     "timestamp": seg["timestamp_start"],
                     "keywords": seg["keywords"] or []
@@ -363,7 +363,7 @@ class SemanticSearchService:
             ],
             "negative_highlights": [
                 {
-                    "text": seg["segment_text"][:300] + "...",
+                    "text": seg["text_content"][:300] + "...",
                     "sentiment_score": seg["sentiment_score"],
                     "timestamp": seg["timestamp_start"],
                     "keywords": seg["keywords"] or []
@@ -387,7 +387,7 @@ class SemanticSearchService:
         """
         sql = """
         INSERT INTO call_segments (
-            call_id, segment_number, segment_text,
+            call_id, segment_number, text_content,
             timestamp_start, timestamp_end, speaker,
             sentiment_score, sentiment_label, confidence_score,
             keywords, entities
@@ -395,7 +395,7 @@ class SemanticSearchService:
             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
         )
         ON CONFLICT (call_id, segment_number) DO UPDATE SET
-            segment_text = EXCLUDED.segment_text,
+            text_content = EXCLUDED.text_content,
             sentiment_score = EXCLUDED.sentiment_score,
             sentiment_label = EXCLUDED.sentiment_label,
             keywords = EXCLUDED.keywords,

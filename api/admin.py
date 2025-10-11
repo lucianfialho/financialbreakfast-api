@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS call_segments (
     id SERIAL PRIMARY KEY,
     call_id INTEGER REFERENCES earnings_calls(id) ON DELETE CASCADE,
     segment_number INTEGER NOT NULL,
-    segment_text TEXT NOT NULL,
+    text_content TEXT NOT NULL,
     timestamp_start FLOAT,
     timestamp_end FLOAT,
     speaker VARCHAR(100),
@@ -124,7 +124,7 @@ CREATE INDEX IF NOT EXISTS idx_call_segments_timestamp ON call_segments(timestam
 
 -- Create full-text search index for Portuguese
 CREATE INDEX IF NOT EXISTS idx_call_segments_text ON call_segments
-USING gin(to_tsvector('portuguese', segment_text));
+USING gin(to_tsvector('portuguese', text_content));
 
 -- Create a view for easy querying
 CREATE OR REPLACE VIEW earnings_call_overview AS
