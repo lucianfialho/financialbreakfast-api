@@ -51,11 +51,9 @@ class SemanticSearchService:
             cs.id,
             cs.text_content,
             cs.timestamp_start,
-            cs.timestamp_end,
             cs.sentiment_score,
-            cs.sentiment_label,
-            cs.keywords,
-            cs.entities,
+            cs.topics,
+            cs.key_points,
             ec.company_symbol,
             ec.year,
             ec.quarter,
@@ -92,20 +90,20 @@ class SemanticSearchService:
                 "id": row["id"],
                 "text": row["text_content"],
                 "timestamp": {
-                    "start": row["timestamp_start"],
-                    "end": row["timestamp_end"]
+                    "start": row["timestamp_start"]
                 },
                 "sentiment": {
-                    "score": row["sentiment_score"],
-                    "label": row["sentiment_label"]
+                    "score": row["sentiment_score"]
                 },
-                "keywords": row["keywords"] or [],
-                "entities": row["entities"] or {},
-                "company": row["company_symbol"],
-                "period": row["period_label"],
-                "year": row["year"],
-                "quarter": row["quarter"],
-                "call_date": row["call_date"].isoformat() if row["call_date"] else None,
+                "metadata": {
+                    "company": row["company_symbol"],
+                    "period": row["period_label"],
+                    "year": row["year"],
+                    "quarter": row["quarter"],
+                    "call_date": row["call_date"].isoformat() if row["call_date"] else None,
+                    "topics": row["topics"] or "",
+                    "key_points": row["key_points"] or ""
+                },
                 "similarity_score": round(row["similarity"], 3)
             })
 
@@ -135,10 +133,9 @@ class SemanticSearchService:
             cs.id,
             cs.text_content,
             cs.timestamp_start,
-            cs.timestamp_end,
             cs.sentiment_score,
-            cs.sentiment_label,
-            cs.keywords,
+            cs.topics,
+            cs.key_points,
             ec.company_symbol,
             ec.year,
             ec.quarter,
@@ -181,18 +178,19 @@ class SemanticSearchService:
                 "id": row["id"],
                 "text": row["text_content"],
                 "timestamp": {
-                    "start": row["timestamp_start"],
-                    "end": row["timestamp_end"]
+                    "start": row["timestamp_start"]
                 },
                 "sentiment": {
-                    "score": row["sentiment_score"],
-                    "label": row["sentiment_label"]
+                    "score": row["sentiment_score"]
                 },
-                "keywords": row["keywords"] or [],
-                "company": row["company_symbol"],
-                "period": row["period_label"],
-                "year": row["year"],
-                "quarter": row["quarter"],
+                "metadata": {
+                    "company": row["company_symbol"],
+                    "period": row["period_label"],
+                    "year": row["year"],
+                    "quarter": row["quarter"],
+                    "topics": row["topics"] or "",
+                    "key_points": row["key_points"] or ""
+                },
                 "relevance_score": round(row["relevance"], 3)
             })
 
