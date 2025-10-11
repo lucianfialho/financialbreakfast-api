@@ -764,12 +764,13 @@ def process_audio_endpoint(
                 VALUES (%s, %s, %s, %s, %s, %s)
                 ON CONFLICT (company_symbol, year, quarter) DO UPDATE SET
                     transcript_text = EXCLUDED.transcript_text,
-                    processed_at = EXCLUDED.processed_at
+                    processed_at = EXCLUDED.processed_at,
+                    id = earnings_calls.id
                 RETURNING id
             """, (company.upper(), "2025-08-08", 2025, 2, sample_transcript, datetime.now()))
 
             call_record = cursor.fetchone()
-            call_id = call_record[0] if call_record else None
+            call_id = call_record[0] if call_record and call_record[0] else 0
 
             if call_id:
                 # Clear existing segments for this call
